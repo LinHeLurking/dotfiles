@@ -1,0 +1,71 @@
+""" Link vim clipboard with system
+set clipboard+=unnamed
+
+""" Map leader to space ---------------------
+let mapleader=" "
+
+""" Plugins  --------------------------------
+Plug 'easymotion/vim-easymotion'
+" Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-surround'
+set easymotion
+set commentary
+
+""" Common settings -------------------------
+set showmode
+set so=5
+set incsearch
+set hlsearch
+set number
+set relativenumber
+
+""" Idea specific settings ------------------
+set ideajoin
+set ideastatusicon=gray
+set idearefactormode=keep
+
+""" Mappings (Common Actions)
+nnoremap <C-c> y
+inoremap <C-c> y
+vnoremap <C-c> y
+
+nnoremap <C-v> p
+inoremap <C-v> <ESC>pa
+
+nnoremap <C-i> <C-a>
+nnoremap <C-a> ggVG
+inoremap <C-a> <ESC>ggVG
+
+nnoremap <C-s> :w<CR>
+inoremap <C-s> <ESC>:w<CR>a
+
+nnoremap <C-o> :action Back<CR>
+
+nnoremap / :set hlsearch<CR>/
+
+" don't know why commentary simulator not working
+nnoremap gcc :action CommentByLineComment<CR>
+vnoremap gc :action CommentByLineComment<CR>
+
+""" Mappings (MISC) --------------------------------
+nnoremap \r :action IdeaVim.ReloadVimRc.reload<CR>
+nnoremap <Leader>ch :set hlsearch!<CR>
+nnoremap <Leader>cr :set relativenumber!<CR>
+
+""" Mappings (Window Action) ------------------------
+nnoremap <A-h> <C-w>h
+nnoremap <A-j> <C-w>j
+nnoremap <A-k> <C-w>k
+nnoremap <A-l> <C-w>l
+
+""" Mappings (Navigation) --------------------------------
+nmap <Leader>hc <Plug>(easymotion-s) " hop char
+nmap <Leader>hw <Plug>(easymotion-w) " hop word
+
+inoremap <C-h> <Left>
+inoremap <C-j> <Down>
+inoremap <C-k> <Up>
+inoremap <C-l> <Right>
+
+nnoremap gi :action GotoImplementation<CR>
+nnoremap gu :action GotToSuperMethod<CR>

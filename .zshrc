@@ -221,6 +221,7 @@ lazyload_completion nvm
 lazyload_cmd conda
 lazyload_completion nala
 lazyload_cmd cargo
+unsetopt autocd
 lazyload_cmd build
 
 

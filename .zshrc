@@ -209,7 +209,7 @@ _lazyload_command__cargo() {
     source ~/.cargo/env
 }
 
-_lazyload_command__build() {
+_load_command__build() {
     local build_cmd="$HOME/.smart_build.sh"
     [[ ! -f "$build_cmd" ]] && echo "$build_cmd not found!" && return 2
     chmod +x "$build_cmd"
@@ -222,7 +222,7 @@ lazyload_cmd conda
 lazyload_completion nala
 lazyload_cmd cargo
 unsetopt autocd
-lazyload_cmd build
+_load_command__build
 
 
 # host dependent cuda setup 

@@ -47,11 +47,13 @@ _build_cmake_dir() {
 
     if [[ "0" != "$(ls | grep cmake-build- | wc -l)" ]]; then
         for candidate in cmake-build-*; do 
-            candidates+=("$candidate")
+            if _test_cmake_dir $candidate; then
+                candidates+=("$candidate")
+            fi
         done
     fi
 
-    [[ -d "build" ]] && candidates+=("build")
+    [[ -d "build" ]] && _test_cmake_dir "build" && candidates+=("build")
     # _warn "$candidates"
 
     N_CANDIDATES="${#candidates[@]}"

@@ -1,8 +1,8 @@
 # Disable history prediction
 # Set-PSReadLineOption -PredictionSource Plugin
 
-$ENV:HTTP_PROXY = "http://127.0.0.1:1089"
-$ENV:HTTPS_PROXY = "http://127.0.0.1:1089"
+# $ENV:HTTP_PROXY = "http://127.0.0.1:1089"
+# $ENV:HTTPS_PROXY = "http://127.0.0.1:1089"
 
 function Use-Gpg {
     if (Get-Command gpgconf.exe -ErrorAction SilentlyContinue) {

@@ -121,7 +121,7 @@ alias vim="nvim"
 alias vvim="/usr/bin/vim"
 
 . ~/.proxy.sh
-set_proxy
+# set_proxy
 export GPG_TTY=$TTY
 
 _verify_plugin() {

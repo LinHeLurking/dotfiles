@@ -146,7 +146,7 @@ lazyload_cmd() {
     # return if no arg 
     [[ "$1" == "" ]] && return
     # lazyload command
-    eval "$1() { \
+    eval "function $1() { \
         unfunction $1; \
         _lazyload_command__$1; \
         $1 \$@ \
@@ -166,15 +166,24 @@ lazyload_completion() {
     compdef $comp_name $1
 }
 
+export NVM_DIR="$HOME/.nvm"
 _lazyload_command__nvm() {
-    local NVM_DIR="$HOME/.nvm"
+    # local NVM_DIR="$HOME/.nvm"
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 }
 
 _lazyload_completion__nvm() {
-    local NVM_DIR="$HOME/.nvm"
+    # local NVM_DIR="$HOME/.nvm"
     [ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
     _lazyload_plugin nvm
+}
+
+_lazyload_command__npm() {
+    nvm help 2>&1 > /dev/null
+}
+
+_lazyload_command__node() {
+    nvm help 2>&1 > /dev/null
 }
 
 _lazyload_command__conda() {
@@ -212,22 +221,27 @@ _lazyload_command__cargo() {
 _load_command__build() {
     local build_cmd="$HOME/.smart_build.sh"
     [[ ! -f "$build_cmd" ]] && echo "$build_cmd not found!" && return 2
-    chmod +x "$build_cmd"
-    alias build="$build_cmd"
+    . "$build_cmd"
 }
 
-lazyload_cmd nvm
+_load_command__install() {
+    local install_cmd="$HOME/.smart_install.sh"
+    [[ ! -f "$install_cmd" ]] && echo "$install_cmd not found!" && return 2
+    . "$install_cmd"
+}
+
+# directly load nvm to enable npm/node executable for neovim usage :(
+_lazyload_command__nvm
+# lazyload_cmd nvm
 lazyload_completion nvm
 lazyload_cmd conda
 lazyload_completion nala
 lazyload_cmd cargo
 unsetopt autocd
 _load_command__build
+_load_command__install
 
 
 # host dependent cuda setup 
 export PATH=/usr/local/cuda-12.2/bin${PATH:+:${PATH}}
 export LD_LIBRARY_PATH=/usr/local/cuda-12.2/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
-
-
-

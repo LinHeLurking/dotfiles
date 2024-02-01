@@ -82,7 +82,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # export NVM_LAZY=1
 # NVM_LAZY_COMMAND=npx
 # conda-zsh-completion is difficult to be lazily loaded :(
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting conda-zsh-completion)
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting conda-zsh-completion rust)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -215,6 +215,10 @@ _lazyload_completion__nala() {
 
 _lazyload_command__cargo() {
     # Rust
+    source ~/.cargo/env
+}
+
+_lazyload_command__rustup() {
     source ~/.cargo/env
 }
 

@@ -6,7 +6,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 # If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:/usr/local/bin:$PATH
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -77,19 +77,11 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-
-# Lazy NVM breaks so many neovim lsp installer :(
-# export NVM_LAZY=1
-# NVM_LAZY_COMMAND=npx
-# conda-zsh-completion is difficult to be lazily loaded :(
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting conda-zsh-completion rust)
+plugins=(git zsh-syntax-highlighting zsh-autosuggestions rust)
 
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -114,47 +106,37 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
 alias ls="ls --color=auto"
-# Alias VIM to NeoVIM
-alias nvim="~/.local/bin/nvim.appimage"
-alias vim="nvim"
-alias vvim="/usr/bin/vim"
+alias vim="~/.local/bin/nvim.appimage"
+alias vvim=/usr/bin/vim
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 . ~/.proxy.sh
 # set_proxy
 export GPG_TTY=$TTY
 
-_verify_plugin() {
-    local base_dir="$1"
-    local name="$2"
-    test -f "${base_dir}/plugins/${name}/${name}.plugin.zsh" || \
-        test -f "${base_dir}/plugin/${name}/_${name}"
-}
-
-_lazyload_plugin() {
-    local plugin_name="$1"
-    if _verify_plugin $ZSH_CUSTOM $plugin; then 
-        local plugin=$ZSH_CUSTOM/plugins/$plugin_name
-        . $plugin
-    elif _verify_plugin $ZSH $plugin; then
-        local plugin=$ZSH/plugins/$plugin_name
-        . $plugin
-    fi
-}
-
 lazyload_cmd() {
-    # return if no arg 
+    # return if no arg
     [[ "$1" == "" ]] && return
     # lazyload command
-    eval "function $1() { \
-        unfunction $1; \
-        _lazyload_command__$1; \
-        $1 \$@ \
-    }"
+    _cancel_cmd=""
+    for cmd in $@; do
+        _cancel_cmd="$_cancel_cmd; unfunction $cmd"
+    done
+    for cmd in $@; do 
+        eval "function $cmd() {\
+            $_cancel_cmd; \
+            _lazyload_command__$1; \
+            $cmd \$@ \
+        }"
+    done 
 }
 
 lazyload_completion() {
-    # return if no arg 
+    # return if no arg
     [[ "$1" == "" ]] && return
     # lazyload completion
     local comp_name="_tmp_completion__$1"
@@ -169,48 +151,33 @@ lazyload_completion() {
 export NVM_DIR="$HOME/.nvm"
 _lazyload_command__nvm() {
     # local NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+    [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"  # This loads nvm
 }
 
 _lazyload_completion__nvm() {
     # local NVM_DIR="$HOME/.nvm"
     [ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-    _lazyload_plugin nvm
 }
 
-_lazyload_command__npm() {
-    nvm help 2>&1 > /dev/null
-}
-
-_lazyload_command__node() {
-    nvm help 2>&1 > /dev/null
-}
-
-_lazyload_command__conda() {
-    # >>> conda initialize >>>
-    # !! Contents within this block are managed by 'conda init' !!
-    __conda_setup="$('/home/linhe/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-    if [ $? -eq 0 ]; then
-        eval "$__conda_setup"
-    else
-        if [ -f "/home/linhe/miniconda3/etc/profile.d/conda.sh" ]; then
-            . "/home/linhe/miniconda3/etc/profile.d/conda.sh"
-        else
-            export PATH="/home/linhe/miniconda3/bin:$PATH"
-        fi
-    fi
-    unset __conda_setup
-    # <<< conda initialize <<<
-}
-
-#compdef nala
-_nala_completion() {
-  eval $(env _TYPER_COMPLETE_ARGS="${words[1,$CURRENT]}" _NALA_COMPLETE=complete_zsh nala)
-}
+# _lazyload_command__conda() {
+#     # >>> conda initialize >>>
+#     # !! Contents within this block are managed by 'conda init' !!
+#     __conda_setup="$('/home/linhe/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+#     if [ $? -eq 0 ]; then
+#         eval "$__conda_setup"
+#     else
+#         if [ -f "/home/linhe/miniconda3/etc/profile.d/conda.sh" ]; then
+#             . "/home/linhe/miniconda3/etc/profile.d/conda.sh"
+#         else
+#             export PATH="/home/linhe/miniconda3/bin:$PATH"
+#         fi
+#     fi
+#     unset __conda_setup
+#     # <<< conda initialize <<<
+# }
 
 _lazyload_completion__nala() {
-    #compdef nala
-    compdef _nala_completion nala
+    eval $(env _TYPER_COMPLETE_ARGS="${words[1,$CURRENT]}" _NALA_COMPLETE=complete_zsh nala)
 }
 
 _lazyload_command__cargo() {
@@ -218,34 +185,14 @@ _lazyload_command__cargo() {
     source ~/.cargo/env
 }
 
-_lazyload_command__rustup() {
-    source ~/.cargo/env
-}
-
-_load_command__build() {
-    local build_cmd="$HOME/.smart_build.sh"
-    [[ ! -f "$build_cmd" ]] && echo "$build_cmd not found!" && return 2
-    . "$build_cmd"
-}
-
-_load_command__install() {
-    local install_cmd="$HOME/.smart_install.sh"
-    [[ ! -f "$install_cmd" ]] && echo "$install_cmd not found!" && return 2
-    . "$install_cmd"
-}
-
-# directly load nvm to enable npm/node executable for neovim usage :(
-_lazyload_command__nvm
-# lazyload_cmd nvm
+lazyload_cmd nvm node npm pnpm
 lazyload_completion nvm
-lazyload_cmd conda
 lazyload_completion nala
-lazyload_cmd cargo
-unsetopt autocd
-_load_command__build
-_load_command__install
+lazyload_cmd cargo rustup
+# rustup & cargo completions are finished with rust zsh plugin
 
+set_proxy
 
-# host dependent cuda setup 
-export PATH=/usr/local/cuda-12.2/bin${PATH:+:${PATH}}
-export LD_LIBRARY_PATH=/usr/local/cuda-12.2/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+# VCPKG
+export VCPKG_ROOT=~/vcpkg
+export PATH=$VCPKG_ROOT:$PATH

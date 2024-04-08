@@ -183,6 +183,8 @@ _load_cmd__cargo() {
     source ~/.cargo/env
 }
 
+# oh-my-zsh nvm plugin won't chainload nvm by vim :(
+# use handcrafted lazy loader to support chainload. (see lines below `_REAL_NVIM`)
 lazyload_cmd nvm node npm pnpm
 lazyload_completion nvm
 lazyload_completion nala
@@ -206,5 +208,6 @@ function nvim() {
     nvm -h > /dev/null
     $_REAL_NVIM $@
 }
+alias nvim=$_REAL_NVIM
 alias vim=nvim
 alias vvim=/usr/bin/vim

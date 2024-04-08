@@ -208,6 +208,5 @@ function nvim() {
     nvm -h > /dev/null
     $_REAL_NVIM $@
 }
-alias nvim=$_REAL_NVIM
 alias vim=nvim
 alias vvim=/usr/bin/vim

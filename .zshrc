@@ -108,8 +108,6 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 alias ls="ls --color=auto"
-alias vim="~/.local/bin/nvim.appimage"
-alias vvim=/usr/bin/vim
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -129,7 +127,7 @@ lazyload_cmd() {
     for cmd in $@; do 
         eval "function $cmd() {\
             $_cancel_cmd; \
-            _lazyload_command__$1; \
+            _load_cmd__$1; \
             $cmd \$@ \
         }"
     done 
@@ -143,23 +141,23 @@ lazyload_completion() {
     eval "${comp_name}() { \
         compdef -d $1; \
         unfunction ${comp_name}; \
-        _lazyload_completion__$1; \
+        _load_completion__$1; \
     }"
     compdef $comp_name $1
 }
 
 export NVM_DIR="$HOME/.nvm"
-_lazyload_command__nvm() {
+_load_cmd__nvm() {
     # local NVM_DIR="$HOME/.nvm"
     [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"  # This loads nvm
 }
 
-_lazyload_completion__nvm() {
+_load_completion__nvm() {
     # local NVM_DIR="$HOME/.nvm"
     [ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 }
 
-# _lazyload_command__conda() {
+# _load_cmd__conda() {
 #     # >>> conda initialize >>>
 #     # !! Contents within this block are managed by 'conda init' !!
 #     __conda_setup="$('/home/linhe/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
@@ -176,11 +174,11 @@ _lazyload_completion__nvm() {
 #     # <<< conda initialize <<<
 # }
 
-_lazyload_completion__nala() {
+_load_completion__nala() {
     eval $(env _TYPER_COMPLETE_ARGS="${words[1,$CURRENT]}" _NALA_COMPLETE=complete_zsh nala)
 }
 
-_lazyload_command__cargo() {
+_load_cmd__cargo() {
     # Rust
     source ~/.cargo/env
 }
@@ -191,8 +189,22 @@ lazyload_completion nala
 lazyload_cmd cargo rustup
 # rustup & cargo completions are finished with rust zsh plugin
 
-set_proxy
+# set_proxy
 
 # VCPKG
 export VCPKG_ROOT=~/vcpkg
 export PATH=$VCPKG_ROOT:$PATH
+export PY_USER_BIN=~/.local/bin
+export PATH=$PY_USER_BIN:$PATH
+
+# neovim lsp heavily uses node. therefore load nvm on its start.
+export _REAL_NVIM="$HOME/.local/bin/nvim.appimage"
+function nvim() {
+    unfunction nvim 
+    alias nvim=$_REAL_NVIM
+    # load nvm 
+    nvm -h > /dev/null
+    $_REAL_NVIM $@
+}
+alias vim=nvim
+alias vvim=/usr/bin/vim

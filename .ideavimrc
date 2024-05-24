@@ -5,11 +5,10 @@ set clipboard+=unnamed
 let mapleader=" "
 
 """ Plugins  --------------------------------
-Plug 'easymotion/vim-easymotion'
-" Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
+Plug 'easymotion/vim-easymotion'
 set easymotion
-set commentary
 
 """ Common settings -------------------------
 set showmode
@@ -41,11 +40,7 @@ inoremap <C-s> <ESC>:w<CR>a
 
 nnoremap <C-o> :action Back<CR>
 
-nnoremap / :set hlsearch<CR>/
-
-" don't know why commentary simulator not working
-nnoremap gcc :action CommentByLineComment<CR>
-vnoremap gc :action CommentByLineComment<CR>
+" nnoremap / :set hlsearch<CR>/
 
 """ Mappings (MISC) --------------------------------
 nnoremap \r :action IdeaVim.ReloadVimRc.reload<CR>
@@ -59,8 +54,7 @@ nnoremap <A-k> <C-w>k
 nnoremap <A-l> <C-w>l
 
 """ Mappings (Navigation) --------------------------------
-nmap <Leader>hc <Plug>(easymotion-s) " hop char
-nmap <Leader>hw <Plug>(easymotion-w) " hop word
+nmap <Leader>j <Plug>(easymotion-bd-w)
 
 inoremap <C-h> <Left>
 inoremap <C-j> <Down>

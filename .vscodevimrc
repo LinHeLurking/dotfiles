@@ -1,16 +1,16 @@
 """ Link vim clipboard with system
-""" set clipboard+=unnamed
+"set clipboard+=unnamed
 
 """ Map leader to space ---------------------
-""" let mapleader=" "
+let mapleader=" "
 
 """ Common settings -------------------------
-""" set showmode
-""" set so=5
-""" set incsearch
-""" set hlsearch
-""" set number
-""" set relativenumber
+" set showmode
+" set so=5
+" set incsearch
+" set hlsearch
+" set number
+" set relativenumber
 
 """ Mappings (Common Actions)
 nnoremap <C-c> y
@@ -26,16 +26,17 @@ inoremap <C-a> <ESC>ggVG
 
 nnoremap <C-s> :w<CR>
 inoremap <C-s> <ESC>:w<CR>a
+nmap K gh
 
 """ Mappings (MISC) --------------------------------
 nnoremap <Leader>ch :set hlsearch!<CR>
 nnoremap <Leader>cr :set relativenumber!<CR>
 
 """ Mappings (Window Action) ------------------------
-""" nnoremap <A-h> <C-w>h
-""" nnoremap <A-j> <C-w>j
-""" nnoremap <A-k> <C-w>k
-""" nnoremap <A-l> <C-w>l
+" nnoremap <A-h> <C-w>h
+" nnoremap <A-j> <C-w>j
+" nnoremap <A-k> <C-w>k
+" nnoremap <A-l> <C-w>l
 
 inoremap <C-h> <Left>
 inoremap <C-j> <Down>

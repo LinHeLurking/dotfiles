@@ -116,80 +116,8 @@ alias ls="ls --color=auto"
 # set_proxy
 export GPG_TTY=$TTY
 
-lazyload_cmd() {
-    # return if no arg
-    [[ "$1" == "" ]] && return
-    # lazyload command
-    _cancel_cmd=""
-    for cmd in $@; do
-        _cancel_cmd="$_cancel_cmd; unfunction $cmd"
-    done
-    for cmd in $@; do 
-        eval "function $cmd() {\
-            $_cancel_cmd; \
-            _load_cmd__$1; \
-            $cmd \$@ \
-        }"
-    done 
-}
-
-lazyload_completion() {
-    # return if no arg
-    [[ "$1" == "" ]] && return
-    # lazyload completion
-    local comp_name="_tmp_completion__$1"
-    eval "${comp_name}() { \
-        compdef -d $1; \
-        unfunction ${comp_name}; \
-        _load_completion__$1; \
-    }"
-    compdef $comp_name $1
-}
-
-export NVM_DIR="$HOME/.nvm"
-_load_cmd__nvm() {
-    # local NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"  # This loads nvm
-}
-
-_load_completion__nvm() {
-    # local NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-}
-
-# _load_cmd__conda() {
-#     # >>> conda initialize >>>
-#     # !! Contents within this block are managed by 'conda init' !!
-#     __conda_setup="$('/home/linhe/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-#     if [ $? -eq 0 ]; then
-#         eval "$__conda_setup"
-#     else
-#         if [ -f "/home/linhe/miniconda3/etc/profile.d/conda.sh" ]; then
-#             . "/home/linhe/miniconda3/etc/profile.d/conda.sh"
-#         else
-#             export PATH="/home/linhe/miniconda3/bin:$PATH"
-#         fi
-#     fi
-#     unset __conda_setup
-#     # <<< conda initialize <<<
-# }
-
-_load_completion__nala() {
-    eval $(env _TYPER_COMPLETE_ARGS="${words[1,$CURRENT]}" _NALA_COMPLETE=complete_zsh nala)
-}
-
-_load_cmd__cargo() {
-    # Rust
-    source ~/.cargo/env
-}
-
-# oh-my-zsh nvm plugin won't chainload nvm by vim :(
-# use handcrafted lazy loader to support chainload. (see lines below `_REAL_NVIM`)
-lazyload_cmd nvm node npm pnpm
-lazyload_completion nvm
-lazyload_completion nala
-lazyload_cmd cargo rustup
-# rustup & cargo completions are finished with rust zsh plugin
+# lazy load conda, nvm, ...
+source ~/.zsh-utils/lazy-load.sh
 
 # set_proxy
 

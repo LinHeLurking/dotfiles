@@ -147,3 +147,17 @@ if [[ -n "$(command -v pipx)" ]]; then
     }
     __lazyload_completion pipx
 fi
+
+# lazy load go 
+if [[ -n "$(command -v go)" ]]; then 
+    export __GO_COMMAND_LOADED=1
+    export __GO_COMPLETION_LOADED=0
+    function __load_go_completion() {
+        if [[ "$__GO_COMPLETION_LOADED" == "1" ]]; then
+            return
+        fi
+        omz plugin load golang
+        export __GO_COMPLETION_LOADED=1
+    }
+    __lazyload_completion go
+fi 

@@ -12,7 +12,7 @@ function plugin_bootstrap() {
         if [[ -d "$ZSH/plugins/$name" ]]; then 
             continue
         fi 
-        if [[ -d "$ZSH_CUSTOM" ]]; then 
+        if [[ -d "$ZSH_CUSTOM"/plugins/$name ]]; then 
             if [[ -n "$__UPDATE_PLUGINS" ]]; then 
                 set -x 
                 pushd $ZSH_CUSTOM/plugins/$name 

@@ -17,13 +17,11 @@ autoload -Uz _zinit
 
 # Turbo mode
 setopt promptsubst
-
-zinit wait lucid for \
-    OMZL::git.zsh \
-    atload"unalias grv" \
-    OMZP::git 
-
 PS1="READY >" # provide a simple prompt till the theme loads
+
+# misc settings
+setopt AUTO_PUSHD
+unsetopt autocd
 
 # Setup powerlevel10k theme.
 zinit wait"!" lucid nocd \
@@ -33,17 +31,44 @@ zinit wait"!" lucid nocd \
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-zinit ice wait lucid
-zinit load zsh-users/zsh-syntax-highlighting.git
+HISTSIZE=1000
+SAVEHIST=50000
+HISTFILE=${XDG_STATE_HOME:-$HOME/.local/state}/.zsh_history
 
-zinit ice wait lucid
-zinit load zsh-users/zsh-autosuggestions.git
+zinit wait lucid for \
+	OMZL::git.zsh \
+	OMZL::clipboard.zsh \
+	OMZL::directories.zsh \
+	OMZL::grep.zsh \
+	OMZL::history.zsh \
+	OMZL::spectrum.zsh \
+	OMZL::completion.zsh \
+	OMZP::git \
+	OMZP::docker-compose
 
+if [[ -f ~/.zconda ]]; then 
+    zinit ice wait lucid
+    zinit snippet ~/.zconda
+fi
 zinit ice wait lucid as"completion"
 zinit snippet https://github.com/conda-incubator/conda-zsh-completion/blob/main/_conda
 
 export NVM_COMPLETION=true
 export NVM_SYMLINK_CURRENT="true"
 zinit wait lucid light-mode for lukechilds/zsh-nvm
+
+zinit ice wait lucid
+zinit load zsh-users/zsh-syntax-highlighting.git
+
+zinit ice wait lucid
+zinit load zsh-users/zsh-autosuggestions.git
+
+# Load this LAST!!!
+zi for \
+    atload"zicompinit; zicdreplay" \
+    blockf \
+    lucid \
+    wait \
+  zsh-users/zsh-completions
 
 ### End of Zinit user settings

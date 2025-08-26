@@ -24,8 +24,8 @@ setopt AUTO_PUSHD
 unsetopt autocd
 
 # history settings 
-HISTSIZE=1000
-SAVEHIST=50000
+HISTSIZE=100000
+SAVEHIST=$HISTSIZE
 setopt SHARE_HISTORY
 setopt INC_APPEND_HISTORY
 HISTFILE=${HOME}/.zsh_history

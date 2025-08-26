@@ -23,6 +23,13 @@ PS1="READY >" # provide a simple prompt till the theme loads
 setopt AUTO_PUSHD
 unsetopt autocd
 
+# history settings 
+HISTSIZE=1000
+SAVEHIST=50000
+setopt SHARE_HISTORY
+setopt INC_APPEND_HISTORY
+HISTFILE=${HOME}/.zsh_history
+
 # Setup powerlevel10k theme.
 zinit wait"!" lucid nocd \
     atload="_p9k_precmd" for \
@@ -31,9 +38,7 @@ zinit wait"!" lucid nocd \
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-HISTSIZE=1000
-SAVEHIST=50000
-HISTFILE=${XDG_STATE_HOME:-$HOME/.local/state}/.zsh_history
+
 
 zinit wait lucid for \
 	OMZL::git.zsh \

@@ -38,7 +38,12 @@ zinit wait"!" lucid nocd \
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-
+zinit wait lucid for \
+    atinit"zicompinit; zicdreplay" \
+        zsh-users/zsh-syntax-highlighting \
+    atload"_zsh_autosuggest_start" \
+        zsh-users/zsh-autosuggestions \
+    zsh-users/zsh-completions
 
 zinit wait lucid for \
 	OMZL::git.zsh \
@@ -62,18 +67,5 @@ export NVM_COMPLETION=true
 export NVM_SYMLINK_CURRENT="true"
 zinit wait lucid light-mode for lukechilds/zsh-nvm
 
-zinit ice wait lucid
-zinit load zsh-users/zsh-syntax-highlighting.git
-
-zinit ice wait lucid
-zinit load zsh-users/zsh-autosuggestions.git
-
-# Load this LAST!!!
-zi for \
-    atload"zicompinit; zicdreplay" \
-    blockf \
-    lucid \
-    wait \
-  zsh-users/zsh-completions
 
 ### End of Zinit user settings

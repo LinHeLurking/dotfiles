@@ -76,20 +76,6 @@ zinit wait lucid for \
     OMZP::kubectl \
     OMZP::direnv
 
-# git town
-if command -v git-town &>/dev/null; then
-    _GIT_TOWN_COMP="${ZSH_CACHE_DIR:-$HOME/.cache/zinit}/completions/_git-town"
-    if [[ ! -f "$_GIT_TOWN_COMP" ]]; then
-        git town completions zsh > "$_GIT_TOWN_COMP" 2>/dev/null
-    fi
-    # to regen comp: `rm "${ZSH_CACHE_DIR:-$HOME/.cache/zinit}/completions/_git-town"`
-    zinit ice wait lucid \
-        as"completion" \
-        has"git-town" \
-    zinit snippet "$_GIT_TOWN_COMP"
-fi
-
-
 if [[ -f $LOCAL_PLUGIN_DIR/conda.zsh ]]; then 
     zinit ice wait lucid
     zinit snippet $LOCAL_PLUGIN_DIR/conda.zsh
@@ -122,3 +108,6 @@ start_agent
 bindkey  "^[[H"   beginning-of-line
 bindkey  "^[[F"   end-of-line
 bindkey  "^[[3~"  delete-char
+
+# if you need git town
+# source <(git town completions zsh)
